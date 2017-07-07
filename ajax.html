@@ -1,0 +1,37 @@
+//ajax请求得到的数据
+function ajax_json(ajax_pageNum){
+	 $.ajax({
+         type: "POST",
+         url: "/qyh_admin/DPNRVINF_B/pageWithSQL?pageNum="+ajax_pageNum+"&pageSize=10",
+         dataType: 'json',
+         data: {
+             //+$("#DPNRVINF_B_search").val()+
+             //or ADDRESS like N'%"+$("#DPNRVINF_B_search").val()+"%'"
+             //将DPCD，ADDV，ADDRESS三个字段进行模糊查询
+             sql: "DPCD like N'%" + $(
+                     "#DPNRVINF_B_search")
+                 .val() + "%' or ADDV like N'%" + $(
+                     "#DPNRVINF_B_search")
+                 .val() + "%' or ADDRESS like N'%" + $(
+                     "#DPNRVINF_B_search")
+                 .val() + "%'"
+         },
+         success: function(response,status, xhr) {
+             queryAll(response);
+         },
+         beforeSend: function() {
+             console.log("即将发送ajax请求");
+         },
+         error: function(xhr,errorText,errorType) {
+             console.log(errorType + ":" + errorType);
+         }
+     });
+}
+//post请求得到的数据
+function post_json(post_pageNum){
+	$.post("/qyh_admin/DPNRVINF_B/page?pageNum="+post_pageNum+"&pageSize=10",
+	        function(result) {
+	            console.debug(result);
+	            queryAll(result);
+	        });
+}
